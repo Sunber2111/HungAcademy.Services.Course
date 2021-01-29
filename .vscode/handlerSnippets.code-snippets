@@ -1,0 +1,111 @@
+{
+  "Query handler": {
+    "prefix": "qhander",
+    "body": [
+      "public class Query : IRequest<ReturnObject>",
+      "{",
+      "",
+      "}",
+      "",
+      "public class Handler : IRequestHandler<Query, ReturnObject>",
+      "{",
+      "    private readonly ICourseServices services;",
+      "    public Handler(ICourseServices services)",
+      "    {",
+      "       this.services = services;",
+      "    }",
+      "",
+      "    public async Task<ReturnObject> Handle(Query request, CancellationToken cancellationToken)",
+      "    {",
+      "           // handler logic goes here",
+      "    }",
+      "}"
+    ],
+    "description": ""
+  },
+  "Command handler": {
+    "prefix": "chandler",
+    "body": [
+      "public class Command : IRequest",
+      "{",
+      "    ",
+      "}",
+      "",
+      "public class Handler : IRequestHandler<Command>",
+      "{",
+      "    private readonly ICourseServices services;",
+      "",
+      "    public Handler(ICourseServices services)",
+      "    {",
+      "       this.services = services;",
+      "    }",
+      "",
+      "    public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)",
+      "    {",
+      "   ",
+      "",
+      "    }",
+      "}"
+    ],
+    "description": ""
+  },
+  "get all": {
+    "prefix": "ga",
+    "body": [
+      "try",
+      "{",
+      "       return await this.services.GetAllAsync();",
+      "}",
+      "catch (Exception)",
+      "{",
+      "       throw new RestException(StatusCode.BadRequest, new { message = \"Thất bại\" });",
+      "}"
+    ],
+    "description": "get all"
+  },
+  "update": {
+    "prefix": "up",
+    "body": [
+      "try",
+      "{",
+      "       var sec = new SectionDto",
+      "       {",
+      "           Id = request.Id,",
+      "           Name = request.Name",
+      "       };",
+      "",
+      "       await this.services.UpdateAsync(sec, request.Id);",
+      "",
+      "       return new UpdateSuccess(\"khóa học\");",
+      "}",
+      "catch (Exception ex)",
+      "{",
+      "       if (ex.GetType() == typeof(NotFoundException))",
+      "       {",
+      "              throw new RestException(StatusCode.BadRequest, new { message = \"Phần học không tồn tại\" });",
+      "       }",
+      "       throw new RestException(StatusCode.BadRequest, new { message = \"Cập nhật thất bại\" });",
+      "}"
+    ],
+    "description": "update"
+  },
+  "delete": {
+    "prefix": "del",
+    "body": [
+      "try",
+      "{",
+      "       await this.services.DeleteAsync(request.Id);",
+      "       return new DeleteSuccess(\"học phần\");",
+      "}",
+      "catch (Exception ex)",
+      "{",
+      "       if (ex.GetType() == typeof(NotFoundException))",
+      "       {",
+      "             throw new RestException(StatusCode.BadRequest, new { message = \"Học phần không tồn tại\" });",
+      "       }",
+      "       throw new RestException(StatusCode.BadRequest, new { message = \"Xóa học phần thất bại\" });",
+      "}"
+    ],
+    "description": "delete"
+  }
+}
